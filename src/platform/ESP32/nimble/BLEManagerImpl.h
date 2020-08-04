@@ -31,33 +31,33 @@
 
 #if CONFIG_BT_NIMBLE_ENABLED
 
+#include "console/console.h"
 #include "esp_nimble_hci.h"
-#include "nimble/nimble_port.h"
-#include "nimble/nimble_port_freertos.h"
 #include "host/ble_hs.h"
 #include "host/util/util.h"
-#include "console/console.h"
+#include "nimble/nimble_port.h"
+#include "nimble/nimble_port_freertos.h"
 #include "services/gap/ble_svc_gap.h"
 
 /* GATT context */
-struct ble_gatt_char_context {
+struct ble_gatt_char_context
+{
     uint16_t conn_handle;
     uint16_t attr_handle;
-    struct ble_gatt_access_ctxt *ctxt;
-    void *arg;
+    struct ble_gatt_access_ctxt * ctxt;
+    void * arg;
 };
 
 namespace chip {
 namespace DeviceLayer {
 namespace Internal {
 
-
 /**
  * Concrete implementation of the NetworkProvisioningServer singleton object for the ESP32 platform.
  */
 class BLEManagerImpl final : public BLEManager,
                              private ::chip::Ble::BleLayer,
-                             //private BleLayer,
+                             // private BleLayer,
                              private BlePlatformDelegate,
                              private BleApplicationDelegate
 {
@@ -145,7 +145,6 @@ class BLEManagerImpl final : public BLEManager,
         uint16_t Unused : 4;
     };
 
-
     CHIPoBLEConState mCons[kMaxConnections];
     CHIPoBLEServiceMode mServiceMode;
     uint16_t mServiceAttrHandle;
@@ -167,16 +166,14 @@ class BLEManagerImpl final : public BLEManager,
     void HandleTXCharCCCDRead(void * param);
     void HandleTXCharCCCDWrite(struct ble_gap_event * gapEvent);
     CHIP_ERROR HandleTXComplete(struct ble_gap_event * gapEvent);
-    CHIP_ERROR HandleGAPConnect(struct ble_gap_event *gapEvent);
-    CHIP_ERROR HandleGAPDisconnect(struct ble_gap_event *gapEvent);
+    CHIP_ERROR HandleGAPConnect(struct ble_gap_event * gapEvent);
+    CHIP_ERROR HandleGAPDisconnect(struct ble_gap_event * gapEvent);
     CHIP_ERROR SetSubscribed(uint16_t conId);
     bool UnsetSubscribed(uint16_t conId);
     bool IsSubscribed(uint16_t conId);
-    static int ble_svr_gap_event(struct ble_gap_event *event, void *arg);
+    static int ble_svr_gap_event(struct ble_gap_event * event, void * arg);
 
-    static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle,
-                            struct ble_gatt_access_ctxt *ctxt,
-                            void *arg);
+    static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt * ctxt, void * arg);
 
     static void DriveBLEState(intptr_t arg);
 };
